@@ -1,0 +1,27 @@
+{
+  "name": "angular-visualisation-components",
+  "version": "0.0.0",
+  "authors": [
+    "Julian Krispel-Samsel <juliankrispel@yahoo.de>"
+  ],
+  "description": "A collection of basic visualisation components for angular",
+  "main": "main.js",
+  "keywords": [
+    "angular",
+    "datavis",
+    "visualisation",
+    "svg"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.20",
+    "lodash": "~2.4.1"
+  }
+}

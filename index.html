@@ -1,0 +1,78 @@
+<html ng-app="app">
+<head>
+<title>Simple Graph without d3</title>
+<style>
+body { font: 12px Arial;
+
+}
+
+path { 
+    stroke-width: 2;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+</style>
+</head>
+<body ng-controller="ctrl">
+<graph data="performanceData" width="chartWidth" height="chartHeight" colors="colors"></graph>
+<br />
+<pie-chart width="pieChartWidth" height="pieChartHeight" data="pieChartData" colors="colors"></pie-chart>
+
+<br />
+
+<br />
+<script type="text/ng-template" id="charts/pie-chart.html">
+<svg width="{{width}}" height="{{height}}">
+<!-- Pie chart sample -->
+<path ng-repeat="p in pieChartData" 
+ng-attr-d="M{{center[0]}},{{center[1]}} {{p.x1}},{{p.y1}} A{{radius}}, {{radius}} 0 {{p.largeArc}},1 {{p.x2}} {{p.y2}} z"
+style="fill:{{p.color}};
+        fill-opacity: 1;
+        stroke: black;
+        stroke-width: 1"/>
+</svg>
+<legend names="labels" colors="colors"></legend>
+</script>
+
+<script type="text/ng-template" id="charts/legend.html">
+<span ng-repeat="l in legendData">
+<span style="width:10px; display: inline-block; height: 10px; background-color: {{l.color}}"></span>
+<span>{{l.name}}</span>
+</span>
+</script>
+
+
+<script type="text/ng-template" id="charts/graph.html">
+<svg ng-attr-width="{{width}}" ng-attr-height="{{height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g ng-repeat="t in ticksY" ng-attr-transform="translate(0, {{padding[0]}})">
+        <line ng-attr-x1="{{padding[3] - 5}}" ng-attr-x2="{{padding[3]}}" ng-attr-y1="{{t.position}}" ng-attr-y2="{{t.position}}" stroke="black"/>
+        <text text-anchor="end" ng-attr-x="{{padding[3] - 10}}" ng-attr-y="{{t.position}}" dy="0.32em">{{t.label}}</text>
+    </g>
+
+    <g ng-repeat="t in ticksX" ng-attr-transform="translate({{padding[3]}}, {{padding[0] + graphHeight}})">
+        <line ng-attr-x1="{{t.position}}" ng-attr-x2="{{t.position}}" y1="0" y2="5" stroke="black"/>
+        <text text-anchor="middle" ng-attr-x="{{t.position}}" y="15" dy="0.32em">{{t.label}}</text>
+    </g>
+
+    <g ng-attr-transform="translate({{padding[3]}}, {{padding[0]}})">
+    <g class="axis">
+        <line ng-attr-x1="0" ng-attr-x2="0" ng-attr-y1="{{graphHeight}}" ng-attr-y2="0" stroke="black"/>
+        <line ng-attr-x1="0" ng-attr-x2="{{graphWidth}}" ng-attr-y1="{{graphHeight}}" ng-attr-y2="{{graphHeight}}" stroke="black"/>
+    </g>
+    <path ng-repeat="g in graphs" ng-attr-d="{{g.path}}"  fill="transparent" stroke="{{g.color}}"/>
+    </g>
+</svg>
+<legend names="labels" colors="colors"></legend>
+</script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
