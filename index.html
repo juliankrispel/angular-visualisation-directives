@@ -3,6 +3,7 @@
 <title>Simple Graph without d3</title>
 <style>
 body { font: 12px Arial;
+    width: 100%;
 
 }
 
@@ -21,7 +22,7 @@ path {
 </style>
 </head>
 <body ng-controller="ctrl">
-<graph data="performanceData" width="chartWidth" height="chartHeight" colors="colors"></graph>
+<graph data="performanceData" height="chartHeight" colors="colors"></graph>
 <br />
 <pie-chart width="pieChartWidth" height="pieChartHeight" data="pieChartData" colors="colors"></pie-chart>
 

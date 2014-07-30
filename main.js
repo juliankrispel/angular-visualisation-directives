@@ -411,7 +411,7 @@
             }
         };
     }])
-    .directive('graph', ['chartService', 'util', function(chartService, util){
+    .directive('graph', ['chartService', '$window', function(chartService, $window){
         return {
             restrict: 'E',
             scope: {
@@ -423,7 +423,17 @@
                 colors: '=?'
             },
             templateUrl: 'charts/graph.html',
+            link: { pre: function($scope, $elem){
+                if(!$scope.width){
+                    $scope.width = $elem[0].parentElement.offsetWidth;
+                    angular.element($window).on('resize', function(){
+                        $scope.width = $elem[0].parentElement.offsetWidth;
+                    });
+                    console.log($scope.width);
+                }}
+            },
             controller: function($scope, $attrs){
+                console.log('ctrl');
                 $scope.padding = $scope.padding || [10, 0, 50, 60];
 
                 $scope.$watch('[data,width,height,padding,ticks,colors]', function(args){
@@ -488,7 +498,6 @@
                     var center = $scope.center = [width/2, height/2];
                     var vectorData = chartService.createPieChartVectors(_.pluck(data, 'value'));
                     var colorScale = chartService.createOrdinalScale(colors);
-                    console.log(data);
                     $scope.pieChartData = _.map(data, function(d, i){
                         return{
                             color: colorScale(),
