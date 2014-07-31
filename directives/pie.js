@@ -11,7 +11,7 @@ angular.module('ngvis')
             padding: '=?',
             resize: '=?'
         },
-        templateUrl: 'charts/pie.html',
+        templateUrl: util.dynamicTemplateUrl('charts/pie.html'),
         link: { post: function($scope, $elem, $attr){
             $timeout(function(){
                 if(!$scope.width){
@@ -47,7 +47,6 @@ angular.module('ngvis')
                 $scope.padding = padding;
 
                 var total = _(data).pluck('value').reduce(function(sum, num) {
-                    console.log(sum,num);
                     return sum + num;
                 });
 

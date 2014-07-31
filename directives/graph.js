@@ -16,7 +16,7 @@ angular.module('ngvis')
                 yGap: '=?',
                 colors: '=?'
             },
-            templateUrl: 'charts/graph.html',
+            templateUrl: util.dynamicTemplateUrl('charts/graph.html'),
             link: { post: function($scope, $elem){
                 $timeout(function(){
                     if(!$scope.width){
