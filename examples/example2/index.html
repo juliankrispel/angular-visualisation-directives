@@ -1,0 +1,44 @@
+<html ng-app="ngvis">
+<head>
+<title>ngVis Simple - A collection of charting components for angular.js</title>
+<link href="style.css" rel="stylesheet">
+</head>
+<body ng-controller="ctrl">
+<pie resize="false" colors="['#3fae2a', '#8679ac', '#4aa6d3', '#e3d454', '#ce7e9d' ]" data="pieChartData" ></pie>
+<script type="text/ng-template" id="charts/pie.html">
+<div class="full-width cf bg-grey">
+
+    <div class="half p--l">
+        <svg viewBox="0 0 {{width}} {{height}}" width="100%" preserveAspectRatio="true">
+            <path ng-repeat="p in pieChartData" 
+            ng-attr-d="M{{center[0]}},{{center[1]}} {{p.x1}},{{p.y1}} A{{radius}}, {{radius}} 0 {{p.largeArc}},1 {{p.x2}} {{p.y2}} z"
+            fill="{{p.color}}"
+            stroke="#eee"
+            stroke-width="1"/>
+        </svg>
+    </div>
+    <div class="half p--l">
+        <ng-include src="'customLegend.html'"></ng-include>
+    </div>
+</div>
+</script>
+
+<script type="text/ng-template" id="customLegend.html">
+<span ng-repeat="l in legend">
+    <div class="block-legend p" style="background: {{l.color}}">
+        <h4 class="block-legend-title">{{l.percentage.toFixed(2)}} %</h4>
+        <span>{{l.label}}</span>
+    </div>
+</span>
+</script>
+
+<script src="../../bower_components/angular/angular.min.js"></script>
+<script src="../../bower_components/lodash/dist/lodash.min.js"></script>
+<script src="main.js"></script>
+<script src="../../services/utility.js"></script>
+<script src="../../services/visualisation.js"></script>
+<script src="../../directives/legend.js"></script>
+<script src="../../directives/graph.js"></script>
+<script src="../../directives/pie.js"></script>
+</body>
+</html>

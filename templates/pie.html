@@ -1,0 +1,7 @@
+<svg width="{{width}}" height="{{height}}">
+    <!-- Pie chart sample -->
+    <path ng-repeat="p in pieChartData"
+          ng-attr-d="M{{center[0]}},{{center[1]}} {{p.x1}},{{p.y1}} A{{radius}}, {{radius}} 0 {{p.largeArc}},1 {{p.x2}} {{p.y2}} z"
+          style="fill:{{p.color}};" />
+</svg>
+<legend names="labels" colors="colors"></legend>
