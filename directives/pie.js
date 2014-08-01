@@ -57,7 +57,6 @@ angular.module('ngvis')
                 var colorScale = visualisationService.createOrdinalScale(colors);
 
                 $scope.pieChartData = _.map(data, function(d, i){
-                    console.log(percentageScale(d.value), d.value);
                     return{
                         color: colorScale(),
                         largeArc: vectorData[i].largeArc,

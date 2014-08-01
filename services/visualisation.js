@@ -64,14 +64,18 @@ angular.module('ngvis')
                 throw new Error('createOrdinalScale only takes array as argument');
             }
 
-            return function(){
-                var firstItem = _array.shift();
-                _array.push(firstItem);
-                return firstItem;
+            return function(num){
+                if(_.isNumber(num) && array.length > num){
+                    return array[num];
+                }else{
+                    var firstItem = _array.shift();
+                    _array.push(firstItem);
+                    return firstItem;
+                }
             };
         },
 
-        createScale: function(minA, maxA, minB, maxB){
+        createScale: function(minA, maxA, minB, maxB, name){
             if(!_.every([minA, maxA, minB, maxB], function(n){
                 return _.isNumber(n) || _.isDate(n);
             })){
@@ -80,7 +84,7 @@ angular.module('ngvis')
 
             if(maxB > minB){
                 return function(value){
-                    return (value - minA) / (maxA - minA) * (maxB - minB);
+                    return (value - minA) / (maxA - minA) * (maxB - minB) + minB;
                 };
             }else if(maxB < minB){
                 //Reverse scale
@@ -92,14 +96,51 @@ angular.module('ngvis')
 
         mockPieChartData: function(){
             return [
-                {label: 'UK', value: 17},
-                {label: 'U.S.A', value: 23},
-                {label: 'North America ', value: 20},
-                {label: 'Asia', value: 4},
+                {label: 'Bonds', value: 17},
+                {label: 'Equities', value: 23},
+                {label: 'Alternatives', value: 20},
+                {label: 'Cash', value: 4},
             ];
         },
 
         mockDeepPieChartData: function(){
+            return [
+                {
+                    label: 'Bonds', 
+                    value: 17,
+                    subGroups: [
+                        {label: 'UK', value: 17},
+                        {label: 'U.S.A', value: 23},
+                        {label: 'North America ', value: 20},
+                        {label: 'Asia', value: 4},
+                    ]
+                },
+                {
+                    label: 'Equities', 
+                    value: 23,
+                    subGroups: [
+                        {label: 'UK', value: 17},
+                        {label: 'U.S.A', value: 23},
+                        {label: 'North America ', value: 20},
+                        {label: 'Asia', value: 4},
+                    ]
+                },
+                {
+                    label: 'Alternatives', 
+                    value: 20,
+                    subGroups: [
+                        {label: 'UK', value: 17},
+                        {label: 'U.S.A', value: 23},
+                        {label: 'North America ', value: 20},
+                        {label: 'Asia', value: 4},
+                    ]
+                },
+                {
+                    label: 'Cash', 
+                    value: 4,
+                    subGroups: []
+                },
+            ];
         },
 
         mockDateRange: function(days){

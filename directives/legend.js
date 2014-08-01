@@ -1,25 +1,39 @@
 (function(){
 angular.module('ngvis')
-.directive('legend', ['visualisationService', function (visualisationService) {
+.directive('legend', ['visualisationService', 'utilityService', function (visualisationService, util) {
     return {
         restrict: 'E',
         replace: true,
         scope: {
-            colors: '=',
-            data: '='
+            data: '=',
+            colors: '='
         },
         templateUrl: util.dynamicTemplateUrl('charts/legend.html'),
         controller: function($scope){
-            $scope.$watch('[colors,data]', function(args){
-                var colors = args[0],
-                    data = args[1];
-                if(_.some([colors, names], _.isUndefined)){
+            console.log($scope);
+            $scope.$watch('[data, colors]', function(args){
+                var data = args[0],
+                    colors = args[1];
+
+                if(_.some([data, colors], _.isUndefined)){
                     return ;
                 }
 
-                var colorScale = visualisationService.createOrdinalScale($scope.colors);
-                $scope.legendData = _.map(names, function(name){
-                    return {color: colorScale(), name: name};
+                var colorScale = visualisationService.createOrdinalScale(colors);
+
+                var total = _(data).pluck('value').reduce(function(sum, num) {
+                    return sum + num;
+                });
+
+                var percentageScale = visualisationService.createScale(0, total, 0, 100);
+
+                $scope.legend = _.map(data, function(d, i){
+                    console.log(d);
+                    return {
+                        label: d.label,
+                        color: colorScale(),
+                        percentage: percentageScale(d.value)
+                    };
                 });
             }, true);
         }

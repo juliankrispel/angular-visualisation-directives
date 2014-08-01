@@ -1,5 +1,7 @@
-body { font: 12px Arial;
+body { 
+    font: 14px Arial;
     width: 100%;
+    color: #555;
 }
 
 *{
@@ -8,6 +10,26 @@ body { font: 12px Arial;
 
 path { 
     stroke-width: 2;
+}
+
+h1,h2,h3,h4,h5,h6{
+    margin: 0;
+    font-weight: normal;
+}
+
+hr{
+    color: inherit;
+    border: none;
+    margin: 1em 0;
+    border-top: 1px solid #ccc;
+}
+
+h1,.h1{
+    font-size: 3em;
+}
+
+h2,.h2{
+    font-size: 2.5em;
 }
 
 .axis path,
@@ -24,20 +46,37 @@ body{padding:0; margin: 0;}
 }
 
 .full-width{
-    width: 100%:
+    width: 100%;
+}
+
+.collapsed-column{
+    width: 0%;
+    float: left;
 }
 
 .third{
     width: 33.333333333333333%;
     float: left;
 }
+
 .half{
     width: 50%;
     float: left;
 }
 
+.maxWidthZero{
+}
+
+.transition{
+    transition: .5s;
+}
+
 .p{
     padding: 1em;
+}
+
+.p-t{
+    padding-top: 1em;
 }
 
 .p--l{
@@ -72,16 +111,126 @@ body{padding:0; margin: 0;}
 }
 
 
-.block-legend{
+.metro-legend{
     margin: 0;
     color: #fff;
     display: block;
     font-size: 1.2em;
+    transition: .5s;
+    overflow: hidden;
+    max-height: 130px;
 }
 
-.block-legend-title{
+
+.metro-legend-fold{
+    max-height: 0;
+}
+
+.metro-legend-title{
     font-weight: normal;
     margin: 0;
-    font-family: Baskerville serif;;
-    font-size: 3.4em;
+    font-size: 3em;
+}
+
+.metro-pie path, .metro-legend{
+    cursor: pointer;
+}
+
+path.metro-pie-unactive{
+    opacity: .5;
+    transform: scale(0.9);
+}
+
+div.metro-pie-unactive{
+    //color: #333;
+    opacity: .6;
+}
+
+.metro-detail{
+    overflow: hidden;
+    display: block;
+    float: left;
+    color: #fff;
+}
+
+.metro-detail > div{
+    min-height: 200px;
+}
+
+.serif{
+    font-family: 'Baskerville Old Face', 'Baskerville', 'Georgia', 'Times New Roman', serif;
+}
+
+.metro-detail-title{
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-size: 2em;
+}
+
+.metro-detail-subgroup{
+}
+
+.metro-detail-percentage{
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.metro-detail-close{
+    background: none;
+    border: none;
+    padding: 0;
+    position: absolute;
+    top: 1.2em;
+    right: 1.2em;
+    cursor: pointer;
+    outline: none;
+}
+
+.metro-detail-close line{
+    stroke: #fff;
+    stroke-width: 4;
+}
+
+.strong{
+    font-weight: bold;
+}
+
+.relative{
+    position: relative;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.uppercase{
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+table{
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    text-align: left;
+}
+
+table th{
+    background: none;
+    font-weight: normal;
+}
+
+table td, table th{
+    padding: 8px;
+}
+
+table td{
+    border: none;
+}
+
+table tbody tr:nth-child(odd){
+    background: #f9f9f9;
 }
