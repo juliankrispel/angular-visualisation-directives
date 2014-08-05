@@ -82,6 +82,11 @@ angular.module('ngvis')
                 throw new Error('scale only accepts numbers or dates');
             }
 
+            minA = minA.valueOf();
+            maxA = maxA.valueOf();
+            minB = minB.valueOf();
+            maxB = maxB.valueOf();
+
             if(maxB > minB){
                 return function(value){
                     return (value - minA) / (maxA - minA) * (maxB - minB) + minB;
@@ -94,60 +99,6 @@ angular.module('ngvis')
             }
         },
 
-        mockPieChartData: function(){
-            return [
-                {label: 'Bonds', value: 17},
-                {label: 'Equities', value: 23},
-                {label: 'Alternatives', value: 20},
-                {label: 'Cash', value: 4},
-            ];
-        },
-
-        mockDeepPieChartData: function(){
-            return [
-                {
-                    label: 'Bonds', 
-                    value: 17,
-                    subGroups: [
-                        {label: 'UK', value: 17},
-                        {label: 'U.S.A', value: 23},
-                        {label: 'North America ', value: 20},
-                        {label: 'Asia', value: 4},
-                    ]
-                },
-                {
-                    label: 'Equities', 
-                    value: 23,
-                    subGroups: [
-                        {label: 'UK', value: 17},
-                        {label: 'U.S.A', value: 23},
-                        {label: 'North America ', value: 20},
-                        {label: 'Asia', value: 4},
-                    ]
-                },
-                {
-                    label: 'Alternatives', 
-                    value: 20,
-                    subGroups: [
-                        {label: 'UK', value: 17},
-                        {label: 'U.S.A', value: 23},
-                        {label: 'North America ', value: 20},
-                        {label: 'Asia', value: 4},
-                    ]
-                },
-                {
-                    label: 'Cash', 
-                    value: 4,
-                    subGroups: []
-                },
-            ];
-        },
-
-        mockDateRange: function(days){
-            return _.times(days, function(i){
-                return new Date((new Date()).setDate(-(days - i)));
-            });
-        },
 
         nearest: function(n, v) {
             n = n / v;
@@ -194,22 +145,39 @@ angular.module('ngvis')
             }
         },
 
-        convertDataToSvgPath: function(data, width, height){
+        convertDataToSvgPaths: function(data, width, height, colors){
+            // Get Max and Min Values
+            var xData = _(data).pluck('data').flatten().pluck('x').value();
+            var yData = _(data).pluck('data').flatten().pluck('y').value();
+
+            var maxY = _.max(yData);
+            var minY = _.min(yData);
+            var maxX = _.max(xData);
+            var minX = _.min(xData);
+
+            // Create Scales to project data values onto x and y coordinates
+            var colorScale = this.createOrdinalScale(colors);
+            var xScale = this.createScale(minX, maxX, 0, width);
+            var yScale = this.createScale(minY, maxY, height, 0);
+            var self = this;
+
+            return _.map(data, function(graph) {
+                return {
+                    label: graph.label,
+                    path: self.convertDataToSvgPath(graph.data, width, height, xScale, yScale),
+                    color: colorScale()
+                };
+            });
+
+        },
+
+        convertDataToSvgPath: function(data, width, height, xScale, yScale){
             this.assertGraphData(data);
             // If we have just an array of numbers normalizeData turns this array into an array with objects 
             // that have x and y attributes
             data = this.normalizeData(data);
             var length = data.length;
 
-            // Get Max and Min Values
-            var maxY = _(data).pluck('y').max().value();
-            var minY = _(data).pluck('y').min().value();
-            var maxX = _(data).pluck('x').max().value();
-            var minX = _(data).pluck('x').min().value();
-
-            // Create Scales to project data values onto x and y coordinates
-            var xScale = this.createScale(minX, maxX, 0, width);
-            var yScale = this.createScale(minY, maxY, height, 0);
 
             // Apply scales to data to make the data into valid path data.
             var pathData = _(data).map(function(dataPoint){
@@ -374,17 +342,6 @@ angular.module('ngvis')
                 });
             }
             return tickObjects;
-        },
-
-        mockGraphData: function(){
-            var yValues = _.shuffle(_.range(-5,32));
-            var xValues = this.mockDateRange(yValues.length);
-            return _(xValues).zip(yValues).map(function(a){
-                return {
-                    x: a[0],
-                    y: a[1]
-                };
-            }).value();
         },
 
         formatChartLabel: function(val){

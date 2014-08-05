@@ -4,7 +4,12 @@
 <link href="style.css" rel="stylesheet">
 </head>
 <body ng-controller="ctrl">
-<div class="p">
+<div class="p p-t--l m-t--l">
+    <h2 class="serif">Performance</h2>
+</div>
+<metro-graph data="graphData" colors="colors" height="500" ></metro-graph>
+
+<div class="p p-t--l m-t--l">
     <h2 class="serif">Asset Allocation</h2>
 </div>
 <metro-pie data="pieChartData" selected="selected" colors="colors"></metro-pie>
@@ -26,14 +31,14 @@
     <tbody>
     <tr 
         class="transition"
-        ng-style="pieChartData[selected].label === a.AssetClassExposure ? highlight : undefined ;"
-        ng-repeat="a in valuation.Holdings">
-        <td>{{a.Asset.Name}}</td>
-        <td class="text-right">{{a.Valuation.Amount.Amount.toFixed(2)}}</td>
-        <td class="text-right">{{a.Valuation.Price.Amount.toFixed(2)}} {{a.Valuation.Price.CurrencySymbol}}</td>
-        <td class="text-right">{{a.Valuation.ProfitLoss.Amount.toFixed(2)}}</td>
-        <td class="text-right">{{a.Asset.Yield.toFixed(2)}}</td>
-        <td class="text-right">{{a.Weight.toFixed(2)}} %</td>
+        ng-style="pieChartData[selected].label === a.assetClass ? highlight : undefined ;"
+        ng-repeat="a in valuation">
+        <td>{{a.name}}</td>
+        <td class="text-right">{{a.value}}</td>
+        <td class="text-right">{{a.price}}</td>
+        <td class="text-right">{{a.profitLoss}}</td>
+        <td class="text-right">{{a.yield}}</td>
+        <td class="text-right">{{a.weight}} %</td>
     </tr>
     </tbody>
 </table>
@@ -41,11 +46,11 @@
 
 
 <script type="text/ng-template" id="charts/metro-pie.html">
-    <div class="full-width cf bg-grey metro-pie">
-        <div class="p--l transition" ng-class="{'half': selected === undefined, 'third': selected !== undefined}">
+    <div class="full-width cf metro-pie">
+        <div class="p-r--l transition" ng-class="{'half': selected === undefined, 'third': selected !== undefined}">
             <pie template-url="metro-pie-vis.html" resize="false"  data="data" colors="colors"></pie>
         </div>
-        <div class="transition" ng-class="{'half': selected === undefined, 'third': selected !== undefined}">
+        <div class="transition" ng-class="{'half': selected === undefined, 'third p-r--l': selected !== undefined}">
             <legend template-url="metro-pie-legend.html" colors="colors" data="data"><legend>
         </div>
         <div class="metro-detail transition" ng-class="{'collapsed-column': pieDetail === undefined, 'third': pieDetail !== undefined}">
@@ -106,13 +111,73 @@
 </div>
 </script>
 
+<script type="text/ng-template" id="charts/graph.html">
+<div>
+<svg ng-attr-width="{{width}}" ng-attr-height="{{height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g class="ticks">
+        <g ng-repeat="t in ticksY" ng-attr-transform="translate(0, {{padding[0]}})">
+            <line ng-attr-x1="{{padding[3]}}" ng-attr-x2="{{graphWidth + padding[3]}}" ng-attr-y1="{{t.position}}" ng-attr-y2="{{t.position}}" stroke="black" />
+            <text text-anchor="end" ng-attr-x="{{padding[3] - 10}}" ng-attr-y="{{t.position}}" dy="0.32em">{{t.label}}</text>
+        </g>
+    </g>
+
+    <g class="ticks">
+        <g ng-repeat="t in ticksX" ng-attr-transform="translate({{padding[3]}}, {{padding[0] + graphHeight}})">
+            <line ng-attr-x1="{{t.position}}" ng-attr-x2="{{t.position}}" y1="0" y2="-{{graphHeight}}" stroke="black" />
+            <text text-anchor="middle" ng-attr-x="{{t.position}}" y="15" dy="0.32em">{{t.label}}</text>
+        </g>
+    </g>
+
+    <g ng-attr-transform="translate({{padding[3]}}, {{padding[0]}})">
+        <g ng-class="{hide: !$parent.mouseOver}">
+            <line ng-attr-x1="{{$parent.cursorPosition}}" ng-attr-x2="{{$parent.cursorPosition}}" ng-attr-y1="0" ng-attr-y2="{{graphHeight}}" stroke="black"/>
+        </g>
+        <g class="axis">
+            <line ng-attr-x1="0" ng-attr-x2="0" ng-attr-y1="{{graphHeight}}" ng-attr-y2="0" stroke="black" />
+            <line ng-attr-x1="0" ng-attr-x2="{{graphWidth}}" ng-attr-y1="{{graphHeight}}" ng-attr-y2="{{graphHeight}}" stroke="black" />
+        </g>
+        <path 
+            ng-repeat="g in graphs" 
+            ng-attr-d="{{g.path}}" 
+            fill="transparent" 
+            stroke="{{g.color}}" />
+        <rect 
+            ng-mouseenter="$parent.mouseOver=true" 
+            ng-mouseleave="$parent.mouseOver=false" 
+            ng-mousemove="$parent.cursorOverGraph($event)"
+            fill="transparent" 
+            ng-attr-width="{{graphWidth}}" 
+            ng-attr-height="{{graphHeight}}"></rect>
+    </g>
+</svg>
+</div>
+
+</script>
+
+<script type="text/ng-template" id="charts/metro-graph.html">
+<div class="relative">
+    <div class="metro-graph-detail" ng-if="mouseOver" style="position: absolute; top: 10px; left: {{graphDetailPosition}}; pointer-events: none;" >
+        <h3>{{graphDetail.date}}</h3>
+        <p ng-repeat="g in graphDetail.graphs">
+            <span style="width: 10px; height: 10px; background: {{g.color}}; display: inline-block;"></span> 
+            <span>{{g.val.toFixed(3)}}</span> 
+            <span>{{g.label}}</span>
+        </p>
+    </div>
+    <graph data="data" colors="colors" height="height" x-ticks="12" width="width"></graph>
+</div>
+</script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
 <script src="../../bower_components/lodash/dist/lodash.min.js"></script>
+<script src="../../bower_components/chance/chance.js"></script>
 <script src="main.js"></script>
+<script src="../../services/mock.js"></script>
 <script src="../../services/utility.js"></script>
 <script src="../../services/visualisation.js"></script>
 <script src="../../directives/legend.js"></script>
 <script src="../../directives/graph.js"></script>
+<script src="../../directives/metro-graph.js"></script>
 <script src="../../directives/pie.js"></script>
 <script src="../../directives/metro-pie.js"></script>
 </body>

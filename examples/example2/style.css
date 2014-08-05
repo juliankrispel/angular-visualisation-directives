@@ -1,7 +1,14 @@
+html{
+    width: 100%;
+}
+
+body{padding:0; margin: 0;}
 body { 
     font: 14px Arial;
     width: 100%;
     color: #555;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 *{
@@ -40,7 +47,6 @@ h2,.h2{
     shape-rendering: crispEdges;
 }
 
-body{padding:0; margin: 0;}
 .bg-grey{
     background: #eee;
 }
@@ -79,8 +85,30 @@ body{padding:0; margin: 0;}
     padding-top: 1em;
 }
 
+.p-t--l{
+    padding-top: 2em;
+}
+
+.m-t{
+    margin-top: 1em;
+}
+
+.m-t--l{
+    margin-top: 2em;
+}
+
+
 .p--l{
     padding: 2em;
+}
+
+
+.p-r{
+    padding-right: 1em;
+}
+
+.p-r--l{
+    padding-right: 2em;
 }
 
 /**
@@ -210,6 +238,21 @@ div.metro-pie-unactive{
     letter-spacing: 2px;
 }
 
+metro-graph .axis line, metro-graph .ticks line{
+    stroke: #e0e0e0;
+}
+metro-graph .ticks text{
+    fill: #999;
+}
+
+metro-graph .metro-graph-detail{
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ccc;
+    margin: 20px 0 0 1px;
+}
+
+
 table{
     border-collapse: collapse;
     margin: 0;
@@ -229,6 +272,10 @@ table td, table th{
 
 table td{
     border: none;
+}
+
+.hide{
+    display: none;
 }
 
 table tbody tr:nth-child(odd){
