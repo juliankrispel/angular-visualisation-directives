@@ -2,9 +2,10 @@
 <head>
 <title>ngVis Simple - A collection of charting components for angular.js</title>
 <link href="style.css" rel="stylesheet">
+<link href="../../bower_components/animate.css/animate.min.css" rel="stylesheet">
 </head>
-<body ng-controller="ctrl">
-<div class="p p-t--l m-t--l">
+<body ng-controller="ctrl" class="fadein">
+<div class="p p-t--l m-t--l ">
     <h2 class="serif">Performance</h2>
 </div>
 <metro-graph data="graphData" colors="colors" height="500" ></metro-graph>
@@ -77,7 +78,7 @@
 
 
 <script type="text/ng-template" id="metro-pie-vis.html">
-<svg viewBox="0 0 {{width}} {{height}}" width="100%" preserveAspectRatio="true">
+<svg class="animated zoomIn" viewBox="0 0 {{width}} {{height}}" width="100%" preserveAspectRatio="true">
     <path 
         ng-mouseover="$parent.$parent.visuallyActivePie = $index" 
         ng-mouseleave="$parent.$parent.visuallyActivePie = undefined" 
@@ -136,11 +137,15 @@
             <line ng-attr-x1="0" ng-attr-x2="0" ng-attr-y1="{{graphHeight}}" ng-attr-y2="0" stroke="black" />
             <line ng-attr-x1="0" ng-attr-x2="{{graphWidth}}" ng-attr-y1="{{graphHeight}}" ng-attr-y2="{{graphHeight}}" stroke="black" />
         </g>
-        <path 
-            ng-repeat="g in graphs" 
-            ng-attr-d="{{g.path}}" 
-            fill="transparent" 
-            stroke="{{g.color}}" />
+        <g class="graphs">
+            <path 
+                animate-path
+                animation-delay="{{$index * 500 + 1000}}"
+                ng-repeat="g in graphs" 
+                ng-attr-d="{{g.path}}" 
+                fill="transparent" 
+                stroke="{{g.color}}" />
+        </g
         <rect 
             ng-mouseenter="$parent.mouseOver=true" 
             ng-mouseleave="$parent.mouseOver=false" 
@@ -177,6 +182,7 @@
 <script src="../../services/visualisation.js"></script>
 <script src="../../directives/legend.js"></script>
 <script src="../../directives/graph.js"></script>
+<script src="../../directives/animatePath.js"></script>
 <script src="../../directives/metro-graph.js"></script>
 <script src="../../directives/pie.js"></script>
 <script src="../../directives/metro-pie.js"></script>

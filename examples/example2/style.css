@@ -245,6 +245,57 @@ metro-graph .ticks text{
     fill: #999;
 }
 
+.graphs path{
+	stroke-dashoffset:1000;
+	stroke-dasharray:1000;
+	-webkit-animation: draw 10s linear forward;
+	-moz-animation: draw 10s linear forward;
+	animation: draw 10s linear forward;
+	-webkit-animation-delay: 5s;
+	animation-delay: 5s;
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadein{
+  -webkit-animation: fadeIn 2s;
+  -moz-animation: fadeIn 2s;
+  -o-animation: fadeIn 2s;
+  -ms-animation: fadeIn 2s;
+  animation: fadeIn 2s;
+}
+
 metro-graph .metro-graph-detail{
     padding: 20px;
     background: #fff;
