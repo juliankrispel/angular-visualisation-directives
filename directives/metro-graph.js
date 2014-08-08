@@ -62,6 +62,7 @@ angular.module('ngvis')
                 }, 1);
 
                 $scope.cursorOverGraph = function(e){
+                    console.log('hello');
                     var bbox = e.target.getBoundingClientRect();
                     var cursorPositionX = e.clientX - bbox.left;
                     var key = $date(new Date(xScale(cursorPositionX + 2)), 'shortDate');
